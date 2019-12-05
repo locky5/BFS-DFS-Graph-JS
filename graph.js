@@ -1,3 +1,24 @@
+class Queue {
+  constructor() {
+    this.arr = []
+  }
+
+  enqueue(element) {
+    this.arr.push(element)
+  }
+
+  dequeue(element) {
+    return this.arr.shift()
+  }
+
+  isEmpty() {
+    if (this.arr.length > 0) {
+      return false
+    }
+    return true
+  }
+}
+
 class Graph {
   constructor(noOfVertices) {
     this.noOfVertices = noOfVertices
@@ -26,6 +47,36 @@ class Graph {
       console.log(i + ' => ' + conc)
     }
   }
+
+  //start from one node and queue all of it's adjacent nodes
+  //then recursively work until you're all done
+  bfs(startingNode) {
+    let visited = {}
+
+    for (let key of this.AdjList.keys()) {
+      visited[key] = false
+    }
+
+    let queue = new Queue()
+    visited[startingNode] = true
+    queue.enqueue(startingNode)
+
+    while (!queue.isEmpty()) {
+      let queueElement = queue.dequeue()
+
+      console.log(queueElement)
+
+      let adjList = this.AdjList.get(queueElement)
+      for (let i = 0; i < adjList.length; i++) {
+        let newElement = adjList[i]
+        if (!visited[newElement]) {
+          visited[newElement] = true
+          queue.enqueue(newElement)
+        }
+      }
+    }
+  }
+
 }
 
 let g = new Graph(6) //6 vertices
@@ -44,4 +95,6 @@ g.addEdge('E', 'F')
 g.addEdge('E', 'C')
 g.addEdge('C', 'F')
 
-g.printGraph()
+// g.printGraph()
+
+g.bfs('A')
